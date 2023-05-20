@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useRef, useEffect, useState } from "react";
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import { Navigate } from "react-router-dom";
@@ -9,6 +9,20 @@ function Login() {
 
   const navigate = useNavigate();
 
+  const userRef = useRef();
+  const errRef = useRef();
+
+  const [errMsg, setErrMsg] = useState("");
+  const [success, setSuccess] = useState(false);
+
+//   useEffect(() => {
+//     userRef.current.focus();
+//   }, []);
+
+  useEffect(() => {
+    setErrMsg("");
+  }, [username, password]);
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
@@ -18,26 +32,50 @@ function Login() {
       });
       console.log(response.data);
       // Redirect to dashboard on successful authentication.
+      setUsername("");
+      setPassword("");
+      // setSuccess(true);
+      console.log("first")
       navigate("/home");
     } catch (error) {
       console.error(error);
+    //   errRef.current.focus();
     }
   };
 
   return (
-    <form onSubmit={handleSubmit}>
-      <label>
-        Username:
-        <input type="text" value={username} onChange={(e) => setUsername(e.target.value)} />
-      </label>
-      <br />
-      <label>
-        Password:
-        <input type="password" value={password} onChange={(e) => setPassword(e.target.value)} />
-      </label>
-      <br />
-      <button type="submit">Login</button>
-    </form>
+    <section>
+      <p
+        ref={errRef}
+        className={errMsg ? "errmsg" : "offscreen"}
+        aria-live="assertive"
+      >
+        {errMsg}
+      </p>
+      <form onSubmit={handleSubmit}>
+        <label htmlFor="username">Username:</label>
+        <input
+          type="text"
+          id="username"
+          ref={userRef}
+          required
+          autoComplete="on"
+          onChange={(e) => setUsername(e.target.value)}
+          value={username}
+        />
+
+        <label htmlFor="password">Password:</label>
+        <input
+          type="password"
+          id="password"
+          required
+          onChange={(e) => setPassword(e.target.value)}
+          value={password}
+        />
+
+        <button>Login</button>
+      </form>
+    </section>
   );
 }
 
