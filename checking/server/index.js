@@ -41,10 +41,10 @@ app.post('/login', (req, res) => {
 
 // Handle POST request for registering a new user
 app.post('/register', (req, res) => {
-    const { username, email, password } = req.body;
+    const { username, password, confirm_password } = req.body;
     
     // Insert new user into database
-    const sql = `INSERT INTO users (username, email, password) VALUES ('${username}', '${email}', '${password}')`;
+    const sql = `INSERT INTO users (username, password, confirm_password) VALUES ('${username}','${password}', '${confirm_password}')`;
     
     db.query(sql, (err, result) => {
       if (err) {
