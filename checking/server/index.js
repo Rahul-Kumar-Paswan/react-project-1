@@ -41,18 +41,31 @@ app.post('/login', (req, res) => {
 
 // Handle POST request for registering a new user
 app.post('/register', (req, res) => {
-    const { username, password, confirm_password } = req.body;
-    
-    // Insert new user into database
-    const sql = `INSERT INTO users (username, password, confirm_password) VALUES ('${username}','${password}', '${confirm_password}')`;
-    
-    db.query(sql, (err, result) => {
-      if (err) {
-        throw err;
+    const username = req.body.username;
+    const password = req.body.password;
+    const confirm_password = req.body.confirm_password;
+    db.query(
+      "select * from users where username = ? ",
+      [username],
+      (error, result) => {
+        if (result.length > 0) {
+          res.send(409).send("Username Already Exists");
+        }
+  
+        db.query(
+          "INSERT INTO users (username,password,confirm_password) VALUES (?,?,?)",
+          [username, password, confirm_password],
+          (error, result) => {
+            console.log("result is",result);
+            if (error) {
+              console.log("error", error);
+              res.status(500).send("An Error Occured");
+            }
+            res.send("Registration Successful");
+          }
+        );
       }
-      console.log(result);
-      res.send('User registered successfully!');
-    });
+    );
   });
 
 
