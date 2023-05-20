@@ -15,9 +15,9 @@ function Login() {
   const [errMsg, setErrMsg] = useState("");
   const [success, setSuccess] = useState(false);
 
-//   useEffect(() => {
-//     userRef.current.focus();
-//   }, []);
+  useEffect(() => {
+    userRef.current.focus();
+  }, []);
 
   useEffect(() => {
     setErrMsg("");
@@ -39,7 +39,11 @@ function Login() {
       navigate("/home");
     } catch (error) {
       console.error(error);
-    //   errRef.current.focus();
+      if (error.response === 401) {
+        console.log(error.response);
+        setErrMsg("Invalid credentials!");
+        errRef.current.focus();
+      }
     }
   };
 
