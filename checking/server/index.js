@@ -43,6 +43,7 @@ app.post('/upload', upload.single('pdf'), (req, res) => {
 
   // Insert file data into MySQL table
   const sql = `INSERT INTO pdf_files (name, type, path) VALUES (?, ?, ?)`;
+  console.log("adding");
   
   db.query(sql, [originalname, mimetype, filename], (err, result) => {
     if (err) {
