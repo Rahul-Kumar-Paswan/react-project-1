@@ -38,12 +38,12 @@ function Login() {
       console.log("first")
       navigate("/home");
     } catch (error) {
-      console.error(error);
-      if (error.response === 401) {
-        console.log(error.response);
+      console.log(error);
+      if (error.response.status === 401) {
         setErrMsg("Invalid credentials!");
-        errRef.current.focus();
+        console.log(error.response);
       }
+      errRef.current.focus();
     }
   };
 
