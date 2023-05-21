@@ -36,7 +36,7 @@ function Login() {
       setPassword("");
       // setSuccess(true);
       console.log("first")
-      navigate("/");
+      navigate("/dashboard");
     } catch (error) {
       console.log(error);
       if (error.response.status === 401) {

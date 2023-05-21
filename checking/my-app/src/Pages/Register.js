@@ -54,7 +54,7 @@ function Register() {
       setPwd("");
       setMatchPwd("");
       setSuccess(true);
-      navigate('/');
+      navigate('/login');
     } catch (error) {
       if (error.response.status === 409) {
         setErrMsg("UserName Taken");

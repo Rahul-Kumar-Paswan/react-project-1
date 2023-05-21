@@ -2,6 +2,7 @@ const express = require('express');
 const mysql = require('mysql');
 const bodyParser = require('body-parser');
 const cors = require('cors');
+const multer = require('multer');
 
 const app = express();
 
@@ -20,6 +21,42 @@ db.getConnection((err, connection) => {
   if (err) throw err;
   console.log('Connected to MySQL database!');
 });
+
+// Configure Multer storage engine
+const storage = multer.diskStorage({
+  destination: function (req, file, cb) {
+    cb(null, './uploads/');
+  },
+  filename: function (req, file, cb) {
+    cb(null, Date.now() + '-' + file.originalname);
+  }
+});
+
+// Initialize Multer upload middleware
+const upload = multer({ storage });
+
+// Handle POST request for uploading PDF files to MySQL table
+app.post('/upload', upload.single('pdf'), (req, res) => {
+
+  // Get uploaded file data from request object
+  const { originalname, mimetype, filename } = req.file;
+
+  // Insert file data into MySQL table
+  const sql = `INSERT INTO pdf_files (name, type, path) VALUES (?, ?, ?)`;
+  
+  db.query(sql, [originalname, mimetype, filename], (err, result) => {
+    if (err) {
+      throw err;
+    }
+    console.log(result);
+    res.send(result);
+  });
+});
+
+
+
+
+
 
 app.post('/login', (req, res) => {
   const { username, password } = req.body;
