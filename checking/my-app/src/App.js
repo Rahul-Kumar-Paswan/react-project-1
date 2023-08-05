@@ -4,6 +4,7 @@ import Register from "./Pages/Register";
 import Home from "./Pages/Home";
 import NoPage from "./Pages/NoPage";
 import Contact from "./Pages/Contact";
+import FileList from "./Pages/FileList";
 import Navbar from "./Components/Navbar";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import Upload from "./Pages/Upload";
@@ -21,6 +22,7 @@ function App() {
           <Route path="/register" element={<Register />}></Route>
           <Route path="/contact" element={<Contact />}></Route>
           <Route path="/upload" element={<Upload />}></Route>
+          <Route path="/view" element={<FileList />}></Route>
           <Route path="/dashboard" element={<Dashboard />}></Route>
           <Route path="*" element={<NoPage />}></Route>
         </Routes>

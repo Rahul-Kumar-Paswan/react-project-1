@@ -9,6 +9,9 @@ export default function Dashboard() {
     <div>
       <h1>Dashboard</h1>
       <Link to="/upload">Upload</Link>
+      <br/>
+      <br />
+      <Link to="/view">View Files</Link>
       {/* <button onClick={() => setShowLinks(!showLinks)}>
           <ReorderIcon />
         </button> */}

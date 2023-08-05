@@ -57,6 +57,56 @@ app.post('/upload', upload.single('pdf'), (req, res) => {
 
 
 
+// Define an API endpoint for fetching all files
+app.get('/api/files', (req, res) => {
+  const query = 'SELECT id, name FROM pdf_files';
+  console.log("first");
+  db.query(query, (error, results) => {
+    if (error) {
+      console.log("error1",error);
+      res.status(500).send('Internal server error');
+    } else {
+      res.json(results);
+    }
+  });
+});
+
+// Define an API endpoint for serving individual files
+app.get('/api/files/:id', (req, res) => {
+  const fileId = req.params.id;
+  
+  // Fetch file data from MySQL based on ID
+  const query = 'SELECT * FROM pdf_files WHERE id = ?';
+  db.query(query, [fileId], (error, results) => {
+    if (error || results.length === 0) {
+      console.log("error",error);
+      res.status(404).send('File not found');
+    } else {
+      // Serve file data as binary response
+      const fileData = results[0].data;
+      res.writeHead(200, {'Content-Type': results[0].mime_type});
+      res.end(fileData);
+    }
+  });
+
+ /*  db.query(
+    'SELECT * FROM pdf_files WHERE id = ?',
+    [id],
+    (error,results)=>{
+      if (error || results.length === 0) {
+        console.error(error);
+        res.status(404).send('File not found');
+      }
+    }
+    const fileData = results[0].data;
+    res.writeHead(200, {'Content-Type': results[0].mime_type});
+    res.end(fileData);
+  );  */
+
+});
+
+
+
 
 
 app.post('/login', (req, res) => {
